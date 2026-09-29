@@ -1,7 +1,6 @@
 services:
   db:
     build: ./db
-    container_name: moodle-db
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: moodle
@@ -19,7 +18,6 @@ services:
 
   moodle-php:
     build: .
-    container_name: moodle-php
     restart: unless-stopped
     depends_on:
       db:
@@ -33,7 +31,6 @@ services:
 
   nginx:
     build: ./nginx
-    container_name: moodle-nginx
     restart: unless-stopped
     depends_on:
       - moodle-php
@@ -44,7 +41,6 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: moodle-redis
     restart: unless-stopped
     command: redis-server --maxmemory 1gb --maxmemory-policy allkeys-lru
 
