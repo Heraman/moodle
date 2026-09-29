@@ -1,4 +1,4 @@
-FROM php:8.3-fpm
+FROM php:8.2-fpm
 
 RUN apt-get update && apt-get install -y \
     libpng-dev libjpeg-dev libzip-dev libicu-dev zlib1g-dev libxml2-dev libxslt1-dev libsodium-dev default-mysql-client git \
@@ -21,7 +21,11 @@ post_max_size=100M\n\
 upload_max_filesize=100M\n" > /usr/local/etc/php/conf.d/moodle.ini
 
 COPY config/php-fpm.conf /usr/local/etc/php-fpm.d/zz-moodle.conf
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 RUN rm -rf /var/www/html/* \
     && git clone -b MOODLE_403_STABLE https://github.com/moodle/moodle.git /var/www/html --depth=1 \
     && chown -R www-data:www-data /var/www/html
+
+ENTRYPOINT ["docker-entrypoint.sh"]
