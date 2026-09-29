@@ -23,5 +23,5 @@ upload_max_filesize=100M\n" > /usr/local/etc/php/conf.d/moodle.ini
 COPY config/php-fpm.conf /usr/local/etc/php-fpm.d/zz-moodle.conf
 
 RUN rm -rf /var/www/html/* \
-    && git clone -b MOODLE_403_STABLE git://git.moodle.org/moodle.git /var/www/html --depth=1 \
+    && git clone -b MOODLE_403_STABLE https://github.com/moodle/moodle.git /var/www/html --depth=1 \
     && chown -R www-data:www-data /var/www/html
