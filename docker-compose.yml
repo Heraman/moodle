@@ -25,6 +25,8 @@ services:
     volumes:
       - moodle_code:/var/www/html
       - moodle_data:/var/www/moodledata
+    environment:
+      MOODLE_BEHIND_SSL_PROXY: "1"
     working_dir: /var/www/html
     expose:
       - "9000"
