@@ -1,8 +1,6 @@
 services:
   db:
-    build:
-      context: .
-      dockerfile: db.Dockerfile
+    build: ./db
     container_name: moodle-db
     restart: unless-stopped
     environment:
@@ -20,30 +18,29 @@ services:
       retries: 10
 
   moodle-php:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     container_name: moodle-php
     restart: unless-stopped
     depends_on:
       db:
         condition: service_healthy
     volumes:
+      - moodle_code:/var/www/html
       - moodle_data:/var/www/moodledata
     working_dir: /var/www/html
     expose:
       - "9000"
 
   nginx:
-    build:
-      context: .
-      dockerfile: nginx/Dockerfile
+    build: ./nginx
     container_name: moodle-nginx
     restart: unless-stopped
     depends_on:
       - moodle-php
     expose:
-      - "80" # Coolify Traefik akan otomatis routing ke port ini
+      - "80"
+    volumes:
+      - moodle_code:/var/www/html:ro
 
   redis:
     image: redis:7-alpine
@@ -54,3 +51,4 @@ services:
 volumes:
   db_data:
   moodle_data:
+  moodle_code:
